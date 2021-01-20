@@ -13,7 +13,7 @@ installed via:
     wget https://repo.anaconda.com/archive/Anaconda3-2020-07-Linux-x86_64.sh
     bash Anaconda3-2020-07-Linux-x86_64.sh
 
-A virtual environment can be installed via:
+A virtual environment can be created via:
 
     conda create -n la_study python=3.8
 
@@ -25,7 +25,7 @@ Core dependencies of the study are:
 
     conda install redis==5.0.3
     pip install pyabc==0.10.12
-    pip install jupyter
+    pip install jupyter==1.0.0
 
 Further dependencies can be found in the respective model subfolders.
 In particular, the tumor model requires an installation of
