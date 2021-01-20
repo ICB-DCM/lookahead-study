@@ -37,5 +37,6 @@ require an installation of [morpheus](https://morpheus.gitlab.io).
 * The `models` folder contains the various test models. Each model consists of
   a model definition, scripts to execute the analysis, and scripts to generate
   the manuscript and supplementary figures.
+  * The `Testresults` folders contain results from the respective model runs.
 * The `Batch_pyABC` folder includes the version of Emad's shell scripts to run
   a redis-server based analysis on a cluster environment.
