@@ -25,6 +25,7 @@ Core dependencies of the study are:
 
     conda install redis==5.0.3
     pip install pyabc==0.10.12
+    pip install jupyter
 
 Further dependencies can be found in the respective model subfolders.
 In particular, the tumor model requires an installation of
