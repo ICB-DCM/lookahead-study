@@ -1,0 +1,165 @@
+INFO:History:Start <ABCSMC(id=1, start_time=2021-01-04 12:50:37.920511, end_time=None)>
+INFO:ABC:Calibration sample before t=0.
+INFO:Epsilon:initial epsilon is 22467660.582960658
+INFO:ABC:t: 0, eps: 22467660.582960658.
+INFO:ABC:Acceptance rate: 200 / 696 = 2.8736e-01, ESS=2.0000e+02.
+INFO:ABC:t: 1, eps: 22440323.11705596.
+INFO:ABC:Acceptance rate: 200 / 1011 = 1.9782e-01, ESS=7.8069e+01.
+INFO:ABC:t: 2, eps: 22411619.82567128.
+INFO:ABC:Acceptance rate: 200 / 1503 = 1.3307e-01, ESS=3.1856e+01.
+INFO:ABC:t: 3, eps: 22312191.555084217.
+INFO:ABC:Acceptance rate: 200 / 1253 = 1.5962e-01, ESS=9.5457e+01.
+INFO:ABC:t: 4, eps: 18321819.762426388.
+INFO:ABC:Acceptance rate: 200 / 1132 = 1.7668e-01, ESS=5.5054e+00.
+INFO:ABC:t: 5, eps: 11958911.254176047.
+INFO:ABC:Acceptance rate: 200 / 930 = 2.1505e-01, ESS=5.7946e+01.
+INFO:ABC:t: 6, eps: 4830623.2796684345.
+INFO:ABC:Acceptance rate: 200 / 1126 = 1.7762e-01, ESS=5.9329e+01.
+INFO:ABC:t: 7, eps: 1958572.3664342277.
+INFO:ABC:Acceptance rate: 200 / 1422 = 1.4065e-01, ESS=4.8544e+01.
+INFO:ABC:t: 8, eps: 823499.6676874812.
+INFO:ABC:Acceptance rate: 200 / 2189 = 9.1366e-02, ESS=5.9757e+01.
+INFO:ABC:t: 9, eps: 529119.7311033725.
+INFO:ABC:Acceptance rate: 200 / 2814 = 7.1073e-02, ESS=6.3690e+01.
+INFO:ABC:t: 10, eps: 353485.7403991318.
+INFO:ABC:Acceptance rate: 200 / 1439 = 1.3899e-01, ESS=6.0697e+01.
+INFO:ABC:t: 11, eps: 212065.66655511828.
+INFO:ABC:Acceptance rate: 200 / 1598 = 1.2516e-01, ESS=8.0760e+01.
+INFO:ABC:t: 12, eps: 138825.85847889291.
+INFO:ABC:Acceptance rate: 200 / 1752 = 1.1416e-01, ESS=6.0675e+01.
+INFO:ABC:t: 13, eps: 83353.17734717985.
+INFO:ABC:Acceptance rate: 200 / 2530 = 7.9051e-02, ESS=5.7921e+01.
+INFO:ABC:t: 14, eps: 57035.331352205925.
+INFO:ABC:Acceptance rate: 200 / 2066 = 9.6805e-02, ESS=6.7526e+01.
+INFO:ABC:t: 15, eps: 36841.174192566876.
+INFO:ABC:Acceptance rate: 200 / 2486 = 8.0451e-02, ESS=7.2323e+01.
+INFO:ABC:t: 16, eps: 25512.64362040862.
+INFO:ABC:Acceptance rate: 200 / 2770 = 7.2202e-02, ESS=7.0443e+01.
+INFO:ABC:t: 17, eps: 16938.340893095978.
+INFO:ABC:Acceptance rate: 200 / 3172 = 6.3052e-02, ESS=7.6543e+01.
+INFO:ABC:t: 18, eps: 12859.117784057402.
+INFO:ABC:Acceptance rate: 200 / 3077 = 6.4998e-02, ESS=8.6675e+01.
+INFO:ABC:t: 19, eps: 8965.151089938347.
+INFO:ABC:Acceptance rate: 200 / 2582 = 7.7459e-02, ESS=7.6881e+01.
+INFO:ABC:t: 20, eps: 6818.55117904246.
+INFO:ABC:Acceptance rate: 200 / 2545 = 7.8585e-02, ESS=2.6805e+01.
+INFO:ABC:t: 21, eps: 5679.79083369438.
+INFO:ABC:Acceptance rate: 200 / 3471 = 5.7620e-02, ESS=4.3459e+01.
+INFO:ABC:t: 22, eps: 4778.559426231588.
+INFO:ABC:Acceptance rate: 200 / 4093 = 4.8864e-02, ESS=7.1508e+00.
+INFO:ABC:t: 23, eps: 2886.35912138872.
+INFO:ABC:Acceptance rate: 200 / 9249 = 2.1624e-02, ESS=5.9318e+01.
+INFO:ABC:t: 24, eps: 2380.5734240361485.
+INFO:ABC:Acceptance rate: 200 / 4776 = 4.1876e-02, ESS=4.4368e+01.
+INFO:ABC:t: 25, eps: 2036.5002244404418.
+INFO:ABC:Acceptance rate: 200 / 4192 = 4.7710e-02, ESS=5.3244e+01.
+INFO:ABC:t: 26, eps: 1653.4166216927315.
+INFO:ABC:Acceptance rate: 200 / 4561 = 4.3850e-02, ESS=9.7623e+01.
+INFO:ABC:t: 27, eps: 1410.5757347264505.
+INFO:ABC:Acceptance rate: 200 / 6453 = 3.0993e-02, ESS=1.0446e+01.
+INFO:ABC:t: 28, eps: 1170.551621203154.
+INFO:ABC:Acceptance rate: 200 / 14843 = 1.3474e-02, ESS=6.6229e+00.
+INFO:ABC:t: 29, eps: 1114.392735011562.
+INFO:ABC:Acceptance rate: 200 / 15905 = 1.2575e-02, ESS=9.2314e+00.
+INFO:ABC:t: 30, eps: 1043.896147051671.
+INFO:ABC:Acceptance rate: 200 / 20777 = 9.6260e-03, ESS=1.0133e+02.
+INFO:ABC:t: 31, eps: 916.0814027662337.
+INFO:ABC:Acceptance rate: 200 / 11711 = 1.7078e-02, ESS=3.8244e+01.
+INFO:ABC:t: 32, eps: 814.8884266540545.
+INFO:ABC:Acceptance rate: 200 / 25179 = 7.9431e-03, ESS=9.9001e+01.
+INFO:ABC:t: 33, eps: 693.8889397816006.
+INFO:ABC:Acceptance rate: 200 / 11669 = 1.7139e-02, ESS=5.8693e+00.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:History:Done <ABCSMC(id=1, start_time=2021-01-04 12:50:37.920511, end_time=2021-01-04 17:07:11.360617)>
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+INFO:History:Start <ABCSMC(id=1, start_time=2021-01-04 17:07:17.235873, end_time=None)>
+INFO:ABC:Calibration sample before t=0.
+INFO:Epsilon:initial epsilon is 22458757.310600083
+INFO:ABC:t: 0, eps: 22458757.310600083.
+INFO:ABC:Acceptance rate: 200 / 805 = 2.4845e-01, ESS=2.0000e+02.
+INFO:ABC:t: 1, eps: 22432796.730048683.
+INFO:ABC:Acceptance rate: 200 / 17090 = 1.1703e-02, ESS=5.8920e+00.
+INFO:ABC:t: 2, eps: 22157709.88765459.
+INFO:ABC:Acceptance rate: 200 / 5880 = 3.4014e-02, ESS=3.2967e+01.
+INFO:ABC:t: 3, eps: 19271647.453408904.
+INFO:ABC:Acceptance rate: 200 / 1190 = 1.6807e-01, ESS=3.1434e+01.
+INFO:ABC:t: 4, eps: 14351348.710740127.
+INFO:ABC:Acceptance rate: 200 / 1019 = 1.9627e-01, ESS=2.0021e+01.
+INFO:ABC:t: 5, eps: 3510148.738734949.
+INFO:ABC:Acceptance rate: 200 / 1474 = 1.3569e-01, ESS=6.1625e+01.
+INFO:ABC:t: 6, eps: 1099868.9456201044.
+INFO:ABC:Acceptance rate: 200 / 1918 = 1.0428e-01, ESS=4.6187e+01.
+INFO:ABC:t: 7, eps: 657905.8456235068.
+INFO:ABC:Acceptance rate: 200 / 3129 = 6.3918e-02, ESS=6.2515e+01.
+INFO:ABC:t: 8, eps: 404625.1588736638.
+INFO:ABC:Acceptance rate: 200 / 2511 = 7.9650e-02, ESS=9.6365e+01.
+INFO:ABC:t: 9, eps: 258250.5204316079.
+INFO:ABC:Acceptance rate: 200 / 1682 = 1.1891e-01, ESS=8.1382e+01.
+INFO:ABC:t: 10, eps: 177081.48205514284.
+INFO:ABC:Acceptance rate: 200 / 1707 = 1.1716e-01, ESS=6.4001e+01.
+INFO:ABC:t: 11, eps: 127968.77345257401.
+INFO:ABC:Acceptance rate: 200 / 2146 = 9.3197e-02, ESS=8.8801e+01.
+INFO:ABC:t: 12, eps: 85155.85793788423.
+INFO:ABC:Acceptance rate: 200 / 1885 = 1.0610e-01, ESS=4.1725e+01.
+INFO:ABC:t: 13, eps: 36866.09611433344.
+INFO:ABC:Acceptance rate: 200 / 3476 = 5.7537e-02, ESS=9.1578e+01.
+INFO:ABC:t: 14, eps: 21225.489308387554.
+INFO:ABC:Acceptance rate: 200 / 3260 = 6.1350e-02, ESS=1.2217e+02.
+INFO:ABC:t: 15, eps: 16015.576889289247.
+INFO:ABC:Acceptance rate: 200 / 2448 = 8.1699e-02, ESS=3.8992e+01.
+INFO:ABC:t: 16, eps: 11623.80576119096.
+INFO:ABC:Acceptance rate: 200 / 4138 = 4.8333e-02, ESS=6.8802e+01.
+INFO:ABC:t: 17, eps: 8700.213696927123.
+INFO:ABC:Acceptance rate: 200 / 4182 = 4.7824e-02, ESS=5.5073e+01.
+INFO:ABC:t: 18, eps: 5705.251364288928.
+INFO:ABC:Acceptance rate: 200 / 6347 = 3.1511e-02, ESS=4.8240e+01.
+INFO:ABC:t: 19, eps: 4839.242049556691.
+INFO:ABC:Acceptance rate: 200 / 3988 = 5.0150e-02, ESS=6.4666e+01.
+INFO:ABC:t: 20, eps: 3628.5525283455495.
+INFO:ABC:Acceptance rate: 200 / 4757 = 4.2043e-02, ESS=1.0377e+01.
+INFO:ABC:t: 21, eps: 2645.430628425007.
+INFO:ABC:Acceptance rate: 200 / 10123 = 1.9757e-02, ESS=2.0622e+01.
+INFO:ABC:t: 22, eps: 2265.8566410885114.
+INFO:ABC:Acceptance rate: 200 / 7643 = 2.6168e-02, ESS=1.0571e+02.
+INFO:ABC:t: 23, eps: 1967.6116484115516.
+INFO:ABC:Acceptance rate: 200 / 3579 = 5.5882e-02, ESS=5.4198e+01.
+INFO:ABC:t: 24, eps: 1558.8813673609832.
+INFO:ABC:Acceptance rate: 200 / 4331 = 4.6179e-02, ESS=7.8110e+01.
+INFO:ABC:t: 25, eps: 1300.5507563486026.
+INFO:ABC:Acceptance rate: 200 / 8399 = 2.3812e-02, ESS=3.6033e+01.
+INFO:ABC:t: 26, eps: 1143.6192313232616.
+INFO:ABC:Acceptance rate: 200 / 11493 = 1.7402e-02, ESS=5.3353e+01.
+INFO:ABC:t: 27, eps: 1015.2448040473674.
+INFO:ABC:Acceptance rate: 200 / 17576 = 1.1379e-02, ESS=7.5051e+01.
+INFO:ABC:t: 28, eps: 893.0879464655089.
+INFO:ABC:Acceptance rate: 200 / 10169 = 1.9668e-02, ESS=4.8472e+01.
+INFO:ABC:t: 29, eps: 803.136101473725.
+INFO:ABC:Acceptance rate: 200 / 8221 = 2.4328e-02, ESS=1.1914e+02.
+INFO:ABC:t: 30, eps: 690.7166842969436.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:ABC:Acceptance rate: 200 / 6848 = 2.9206e-02, ESS=1.9055e+01.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:History:Done <ABCSMC(id=1, start_time=2021-01-04 17:07:17.235873, end_time=2021-01-04 20:32:16.863978)>
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
+/p/home/jusers/reck1/juwels/pyABC/pyabc/visualization/kde.py:350: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+  mesh = ax.pcolormesh(X, Y, PDF, **kwargs)
