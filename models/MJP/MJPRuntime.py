@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import pyabc
 import matplotlib.pyplot as plt
 import os
@@ -12,32 +6,40 @@ import numpy as np
 import scipy as sp
 import time
 
-
-db_path = ("sqlite://")
-logfile_path="/home/felipe/testresults/MJPAcceptanceRates.csv"
+path="/p/project/fitmulticell/felipe/scripts/Batch_pyABC/programs/MJP"
 
 
-# In[ ]:
+import argparse
 
+parser = argparse.ArgumentParser(description='Parse necessary arguments')
+parser.add_argument('-pt', '--port', type=str, default="50004",
+                    help='Which port should be used?')
+parser.add_argument('-ip', '--ip', type=str,
+                    help='Dynamically passed - BW: Login Node 3')
+parser.add_argument('-nd','--nodes', type=int, default=8, help='How many nodes are used')
 
-port=6358
+args = parser.parse_args()
 
-eps_list=[10, 5, 3, 2, 1, 0.8, 0.66]
+port = args.port
+host = args.ip
+nodes=args.nodes
+
+# Set constants
+
+eps_list=[10, 5, 3, 2, 1, 0.85, 0.75, 0.66]
 eps=pyabc.ListEpsilon(eps_list)
-#eps=pyabc.MedianEpsilon(500, median_multiplier=0.8)
-
 max_nr_pop=len(eps_list)
 min_eps=0.66
-pop_sizes = [32, 64, 128, 256, 512, 1024, 2048]
-iters_PPP = 15
-iters_ori = 10
-resultfilepath = "/home/freck/sampling/log/MJPruntimeresults.txt"
+pop_sizes = [64, 256, 1024, 4096]
+iters_PPP = 25
+iters_ori = 25
+resultfilepath = os.path.join(path, "results/MJPruntimeresultsN"+str(nodes))
 resultfile = open(resultfilepath, "w")
 resultfile.write("Pop size, Look_ahead, Repetitions, Runtime Expectation, Runtime Variance, total Walltime\n")
 resultfile.close()
 
 
-# In[ ]:
+# Define the model
 
 
 def h(x, pre, c):
@@ -98,10 +100,6 @@ def gillespie(x, c, pre, post, max_t):
 
     return np.array(t_store), np.array(x_store)
 
-
-# In[ ]:
-
-
 MAX_T = 0.1
 
 class Model1:
@@ -137,13 +135,13 @@ def distance(x, y):
 prior = pyabc.Distribution(rate=pyabc.RV("uniform", 0, 100))
 
 
-# In[ ]:
+# Run inference in Look-Ahead mode
 
 
-redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host="131.220.224.226",
+redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host=host,
                                                        port=port,
-                                                       look_ahead = True, 
-						       look_ahead_delay_evaluation = True)
+                                                       look_ahead = True,
+                                                       look_ahead_delay_evaluations=False)
 
 histories=[]
 runtimes=np.zeros(iters_PPP)
@@ -152,7 +150,11 @@ for pop_size in pop_sizes:
     totalstarttime =time.time()
     for i in range(iters_PPP):
         starttime=time.time()
-
+        
+        db_path = "sqlite:///" + os.path.join(path,
+                                              "results/database",
+                                              "MJPLAdatabase"+str(i))
+        
         abc = pyabc.ABCSMC(models = Model1(),
                    parameter_priors = prior,
                    distance_function = distance,
@@ -181,9 +183,9 @@ for pop_size in pop_sizes:
     resultfile.close()
 
 
-# In[ ]:
+# Run in Standard mode
 
-redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host="131.220.224.226",
+redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host=host,
                                                        port=port,
                                                        look_ahead = False)
 
@@ -194,7 +196,11 @@ for pop_size in pop_sizes:
     totalstarttime =time.time()
     for i in range(iters_ori):
         starttime=time.time()
-
+        
+        db_path_ori = "sqlite:///" + os.path.join(path,
+                                              "results/database",
+                                              "MJPORIdatabase"+str(i))
+        
         abc = pyabc.ABCSMC(models = Model1(),
                    parameter_priors = prior,
                    distance_function = distance,
@@ -202,7 +208,7 @@ for pop_size in pop_sizes:
                    sampler = redis_sampler,
                    eps = eps)
 
-        abc.new(db_path, observations)
+        abc.new(db_path_ori, observations)
         history = abc.run(minimum_epsilon=min_eps, max_nr_populations=max_nr_pop)
 
         endtime=time.time()

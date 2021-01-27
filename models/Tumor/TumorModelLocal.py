@@ -8,38 +8,21 @@
 
 
 from time import time
+import tumor2d
 
 import matplotlib.pyplot as plt
 from string import capwords
-import os
-import tempfile
 
 import pyabc
-import tumor2d
 
-import argparse
 
-parser = argparse.ArgumentParser(description='Parse necessary arguments')
-parser.add_argument('-pt', '--port', type=str, default="50004",
-                    help='Which port should be used?')
-parser.add_argument('-ip', '--ip', type=str,
-                    help='Dynamically passed - BW: Login Node 3')
-args = parser.parse_args()
+pop_size = 200
+min_eps=700
+min_eps_ori=min_eps
+max_nr_pop=100
+resultfile = open("/home/freck/sampling/log/TumorRuntimes.txt", "a")
+port=6358
 
-port = args.port
-host = args.ip
-
-nnodes = 32
-pop_size = 1000
-min_eps = 700
-min_eps_ori = min_eps
-max_nr_pop = 100
-logfilepath = "/p/home/jusers/reck1/juwels/scripts/programs/results/TumorStats"+str(pop_size)+".csv"
-resultfile = open("/p/home/jusers/reck1/juwels/scripts/programs/results/TumorRuntimes"+str(nnodes)+".txt", "a")
-
-db_path = "sqlite:///" + os.path.join("/p/home/jusers/reck1/juwels/scripts/programs/results", "TumorRes"+str(pop_size)+".db")
-
-db_path_ori = "sqlite:///" + os.path.join("/p/home/jusers/reck1/juwels/scripts/programs/results", "TumorRes_ori"+str(pop_size)+".db")
 
 # In[2]:
 
@@ -108,7 +91,7 @@ data_mean = tumor2d.load_default()[1]  # (raw, mean, var)
 # In[6]:
 
 
-redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host=host, port=port, look_ahead = False)
+redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host="131.220.224.226", port=port, look_ahead = False)
 
 starttime=time()
 abc = pyabc.ABCSMC(models=tumor2d.log_model, 
@@ -117,7 +100,7 @@ abc = pyabc.ABCSMC(models=tumor2d.log_model,
                    population_size=pop_size, 
                    sampler=redis_sampler)
 
-abc.new(db_path_ori, data_mean)
+abc.new("sqlite:////tmp/test.db", data_mean)
 history_f = abc.run(max_nr_populations=max_nr_pop, minimum_epsilon=min_eps_ori)
 endtime=time()
 
@@ -128,13 +111,13 @@ resultfile.write("Ori, " + str(endtime-starttime)+", " + str(pop_size) + ", " + 
 
 df, w = history_f.get_distribution(m=0,t=history_f.max_t)
 pyabc.visualization.plot_kde_matrix(df, w, limits=limits);
-plt.savefig("/p/home/jusers/reck1/juwels/scripts/programs/img/TumorResOri"+str(pop_size)+".jpg")
+plt.savefig("/home/freck/sampling/log/img/TumorResOri.jpg")
 
 
 # In[8]:
 
 
-redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host=host, port=port, look_ahead = True, look_ahead_delay_evaluation=True, log_file=logfilepath)
+redis_sampler = pyabc.sampler.RedisEvalParallelSampler(host="131.220.224.226", port=port, look_ahead = True, look_ahead_delay_evaluation=True, log_file="/home/freck/sampling/log/tumorlogs/statistics.csv")
 
 starttime=time()
 abc = pyabc.ABCSMC(tumor2d.log_model, 
@@ -143,17 +126,17 @@ abc = pyabc.ABCSMC(tumor2d.log_model,
                    population_size=pop_size, 
                    sampler=redis_sampler)
 
-abc.new(db_path, data_mean)
+abc.new("sqlite:////tmp/test.db", data_mean)
 history = abc.run(max_nr_populations=max_nr_pop, minimum_epsilon=min_eps)
 endtime=time()
 
-resultfile.write("LA, " + str(endtime-starttime)+", " + str(pop_size) + ", " + str(min_eps))
+resultfile.write("Ori, " + str(endtime-starttime)+", " + str(pop_size) + ", " + str(min_eps))
 
 # In[10]:
 
 
 df, w = history.get_distribution(m=0, t=history.max_t)
 pyabc.visualization.plot_kde_matrix(df, w, limits=limits);
-plt.savefig("/p/home/jusers/reck1/juwels/scripts/programs/img/TumorResPPP"+str(pop_size)+".jpg")
+plt.savefig("/home/freck/sampling/log/img/TumorResPPP.jpg")
 
 
