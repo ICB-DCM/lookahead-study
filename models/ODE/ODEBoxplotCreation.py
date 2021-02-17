@@ -1,8 +1,4 @@
-# In[1]:
-
-
 import pyabc
-import matplotlib.rc
 import matplotlib.pyplot as plt
 import os
 import tempfile
@@ -11,11 +7,13 @@ import numpy as np
 import seaborn as sns
 import pandas as pd
 
-font = {'family' : 'normal',
-        'weight' : 'normal',
-        'size'   : 16}
 
-matplotlib.rc('font', **font)
+font = {'family' : 'DejaVu Sans',
+        'weight' : 'normal',
+        'size'   : 12}
+from matplotlib import rc
+rc('font', **font)
+
 
 # In[2]:
 
@@ -23,413 +21,250 @@ matplotlib.rc('font', **font)
 nodes = 8
 noisevar = 0.03
 
-sleepvars=[1,1.5,2]
+sleepvars=[1.0, 1.5, 2.0]
 
-basepath="/p/home/jusers/reck1/juwels/scripts/Batch_pyABC/programs/ODE"
+basepath="/p/project/fitmulticell/felipe/scripts/Batch_pyABC/programs/ODE"
 
-pop_sizes = [64,256,1024,4096]
-psize=pop_sizes[-1]
-
+pop_sizes = [64, 256, 1024, 4096]
 
 eps_list=[8, 4, 2, 1, 0.7,  0.5, 0.33, 0.25]
 eps = pyabc.ListEpsilon(eps_list)
 
-iters_LA=25
-iters_ORI=25
-iters_STAT=3
+iters_LA=[30,30,30]
+iters_ORI=[30,30,30]
+iters_STAT=[1,1,1]
 
 
 # In[3]:
 
+def load_histories(basepath, look_ahead, iters, sleepvar, popsize):
+    histories = []
+    for i in range(iters):
+        path=os.path.join(basepath,
+                          "results/Var"+str(sleepvar)+"/database", 
+                          str(look_ahead)+str(nodes)+"_"+str(popsize)+"_"+str(i)+".db")
+        histories.append(pyabc.History("sqlite:///" + path))
+    return histories
 
-
-histories_LA=[]
-for i in range(iters_LA):
-    histories_LA.append(pyabc.History("sqlite:///" +
-                                      os.path.join(basepath,
-                                                   "results/Var"+str(sleepvars[0])+"/database",
-                                                   "DYNLA"+str(nodes)+"_"+str(psize)+"_"+str(i)+".db")))
-
-histories_ORI=[]
-for i in range(iters_ORI):
-    histories_ORI.append(pyabc.History("sqlite:///" +
-                                      os.path.join(basepath,
-                                                   "results/Var"+str(sleepvars[0])+"/database",
-                                                   "ORI"+str(nodes)+"_"+str(psize)+"_"+str(i)+".db")))
-
-histories_STAT=[]
-for i in range(iters_STAT):
-    histories_STAT.append(pyabc.History("sqlite:///" +
-                                      os.path.join(basepath,
-                                                   "results/Var"+str(sleepvars[0])+"/database",
-                                                   "STATIC"+str(nodes)+"_"+str(psize)+"_"+str(i)+".db")))
+histories_LA=load_histories(basepath, "DYNLA", iters_LA[0], sleepvars[0], pop_sizes[-1])
+histories_ORI=load_histories(basepath, "ORI", iters_ORI[0], sleepvars[0], pop_sizes[-1])
+histories_STATIC=load_histories(basepath, "STATIC", iters_STAT[0], sleepvars[0], pop_sizes[-1])
 
 
 # In[4]:
 
 
-allnames=[]
-allnames.append("theta1_means")
-allnames.append("theta1_stds")
+col_names=["theta1_means", "theta1_stds", "effective_sample_size", "theta2_means", "theta2_stds"]
 
-allnames.append("effective_sample_size")
+def get_data(histories, iters):
+    alldata=np.zeros((iters, len(col_names)))
+    for i in range(iters):
+        df,w= histories[i].get_distribution(m=0,t=histories[i].max_t)
 
-allnames.append("theta2_means")
-allnames.append("theta2_stds")
+        points = df['theta1'].values
+        alldata[i,0]=pyabc.weighted_statistics.weighted_mean(points,w)
+        alldata[i,1]=pyabc.weighted_statistics.weighted_std(points,w)
+
+        points = df['theta2'].values
+        alldata[i,3]=pyabc.weighted_statistics.weighted_mean(points,w)
+        alldata[i,4]=pyabc.weighted_statistics.weighted_std(points,w)
+
+        alldata[i,2]=pyabc.weighted_statistics.effective_sample_size(w)
+
+    return np.array(alldata)
+
+alldata_LA=get_data(histories_LA, iters_LA[0])
+alldata_ORI=get_data(histories_ORI, iters_ORI[0])
 
 
 # In[5]:
 
 
-theta1_means_LA = np.zeros(iters_LA)
-theta1_stds_LA = np.zeros(iters_LA)
-
-theta2_means_LA = np.zeros(iters_LA)
-theta2_stds_LA = np.zeros(iters_LA)
-
-effective_sample_size_LA=np.zeros(iters_LA)
-
-for i in range(iters_LA):
-    
-    df,w= histories_LA[i].get_distribution(m=0,t=histories_LA[i].max_t)
-    
-    points = df['theta1'].values
-    theta1_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-    theta1_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-    
-    points = df['theta2'].values
-    theta2_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-    theta2_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-    
-    effective_sample_size_LA[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-alldata_LA = []
-for i in range(len(allnames)):
-    alldata_LA.append(eval(allnames[i]+"_LA"))
-
-
-# In[6]:
-
-
-theta1_means_ORI = np.zeros(iters_ORI)
-theta1_stds_ORI = np.zeros(iters_ORI)
-
-theta2_means_ORI = np.zeros(iters_ORI)
-theta2_stds_ORI = np.zeros(iters_ORI)
-
-effective_sample_size_ORI = np.zeros(iters_ORI)
-
-for i in range(iters_ORI):
-    
-    df,w= histories_ORI[i].get_distribution(m=0,t=histories_ORI[i].max_t)
-    
-    points = df['theta1'].values
-    theta1_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-    theta1_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-    
-    points = df['theta2'].values
-    theta2_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-    theta2_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-    
-    effective_sample_size_ORI[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-alldata_ORI = []
-for i in range(len(allnames)):
-    alldata_ORI.append(eval(allnames[i]+"_ORI"))
-
-
-# In[7]:
 
 
 fig = plt.figure(figsize=(15,8))
 nx, ny=2, 3
 
-for i in range(5):
+for i in range(len(col_names)):
     ax = fig.add_subplot(nx,ny,i+1)
-    ax.set_title(allnames[i])
+    ax.set_title(col_names[i])
 
     bins=10
-    binrange_min=min(alldata_LA[i].min(),alldata_ORI[i].min())
-    binrange_max=max(alldata_LA[i].max(),alldata_ORI[i].max())
-    sns.histplot(alldata_LA[i], ax = ax, bins = bins,
+    binrange_min=min(alldata_LA[:,i].min(),alldata_ORI[:,i].min())
+    binrange_max=max(alldata_LA[:,i].max(),alldata_ORI[:,i].max())
+    sns.histplot(alldata_LA[:,i], ax = ax, bins = bins,
                  binrange = (binrange_min, binrange_max), common_bins = True,
                  kde=False, label="Look ahead", color = "orange", alpha = 0.3)
-    sns.histplot(alldata_ORI[i], ax = ax, bins = bins,
+    sns.histplot(alldata_ORI[:,i], ax = ax, bins = bins,
                  binrange = (binrange_min, binrange_max), common_bins = True,
                  kde=False, label="Original", color = "blue", alpha = 0.2)
-    ax.axvline(x = alldata_LA[i].mean(), label="means", color="blue", linestyle="dashed")
-    ax.axvline(x = alldata_ORI[i].mean(),color="orange", linestyle="dashed")
+    ax.axvline(x = alldata_LA[:,i].mean(), label="means", color="blue", linestyle="dashed")
+    ax.axvline(x = alldata_ORI[:,i].mean(),color="orange", linestyle="dashed")
         
     ax.legend()
 fig.tight_layout()
-plt.savefig(os.path.join(basepath, "img", "MeansIEcomparision.pdf"))
+plt.savefig(os.path.join(basepath, "img", "ODEMeansIEcomparision.pdf"))
 
 
-# In[8]:
+# In[6]:
 
 
-df_LA=pd.DataFrame(np.array(alldata_LA).transpose(), columns=allnames)
-df_LA['Look_ahead']=True
-df_LA['LNVariance']=sleepvars[0]
 
-df_ORI=pd.DataFrame(np.array(alldata_ORI).transpose(), columns=allnames)
-df_ORI['Look_ahead']=False
-df_ORI['LNVariance']=sleepvars[0]
+def data_to_frame(basepath, look_aheads, alliters, sleepvars, pop_sizes):
+    allframes = []
+    for i in range(len(alliters)):
+        for k in pop_sizes:
+            for l in range(len(sleepvars)):
 
-if len(sleepvars)>1:
-    for k in sleepvars:
-        histories_LA_temp=[]
-        for i in range(iters_LA):
-            histories_LA_temp.append(pyabc.History("sqlite:///" +
-                                                  os.path.join(basepath,
-                                                               "results/Var"+str(k)+"/database",
-                                                               "DYNLA"+str(nodes)+"_"+str(psize)+"_"+str(i)+".db")))
-            
-        histories_ORI_temp=[]
-        for i in range(iters_ORI):
-            histories_ORI_temp.append(pyabc.History("sqlite:///" +
-                                                  os.path.join(basepath,
-                                                               "results/Var"+str(k)+"/database",
-                                                               "ORI"+str(nodes)+"_"+str(psize)+"_"+str(i)+".db")))
-        
-        theta1_means_LA = np.zeros(iters_LA)
-        theta1_stds_LA = np.zeros(iters_LA)
+                keks = load_histories(basepath, look_aheads[i], alliters[i][l] , sleepvars[l], k)
+                keksarray = get_data(keks, alliters[i][l])
+                keksframe = pd.DataFrame(keksarray, columns=col_names)
+                if look_aheads[i]=='LA' or look_aheads[i]=='DYNLA' or look_aheads[i]=='PPP':
+                    keksframe['Scheduling'] = "LA"
+                elif look_aheads[i]=='Ori' or look_aheads[i]=='ORI':
+                    keksframe['Scheduling'] = "DYN"
+                else: keksframe['Scheduling'] = look_aheads[i]
+                keksframe['LNVariance'] = sleepvars[l]
+                keksframe['Pop_size'] = k
+                allframes.append(keksframe)
 
-        theta2_means_LA = np.zeros(iters_LA)
-        theta2_stds_LA = np.zeros(iters_LA)
+    df = pd.concat(allframes)
+    return df
 
-        effective_sample_size_LA=np.zeros(iters_LA)
-
-        for i in range(iters_LA):
-
-            df,w= histories_LA_temp[i].get_distribution(m=0,t=histories_LA[i].max_t)
-
-            points = df['theta1'].values
-            theta1_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta1_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            points = df['theta2'].values
-            theta2_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta2_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            effective_sample_size_LA[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-        alldata_LA_temp = []
-        for i in range(len(allnames)):
-            alldata_LA_temp.append(eval(allnames[i]+"_LA"))
-        
-        
-        theta1_means_ORI = np.zeros(iters_ORI)
-        theta1_stds_ORI = np.zeros(iters_ORI)
-
-        theta2_means_ORI = np.zeros(iters_ORI)
-        theta2_stds_ORI = np.zeros(iters_ORI)
-
-        effective_sample_size_ORI = np.zeros(iters_ORI)
-
-        for i in range(iters_ORI):
-
-            df,w= histories_ORI_temp[i].get_distribution(m=0,t=histories_ORI[i].max_t)
-
-            points = df['theta1'].values
-            theta1_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta1_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            points = df['theta2'].values
-            theta2_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta2_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            effective_sample_size_ORI[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-        alldata_ORI_temp = []
-        for i in range(len(allnames)):
-            alldata_ORI_temp.append(eval(allnames[i]+"_ORI"))
-        
-        df_LA_temp=pd.DataFrame(np.array(alldata_LA_temp).transpose(), columns=allnames)
-        df_LA_temp['Look_ahead']=True
-        df_LA_temp['LNVariance']=k
-        
-        df_LA=pd.concat([df_LA, df_LA_temp])
-        
-        df_ORI_temp=pd.DataFrame(np.array(alldata_ORI_temp).transpose(), columns=allnames)
-        df_ORI_temp['Look_ahead']=False
-        df_ORI_temp['LNVariance']=k
-        
-        df_ORI=pd.concat([df_ORI, df_ORI_temp])
-
-FullDFVar = pd.concat([df_ORI, df_LA])
+FullDFVar=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], sleepvars, [pop_sizes[-1]])
+FullDFVar_N256=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], sleepvars, [pop_sizes[0]])
+FullDFPop=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], [1], pop_sizes)
 
 
-# In[14]:
+# In[9]:
 
 
-df_LA=pd.DataFrame(np.array(alldata_LA).transpose(), columns=allnames)
-df_LA['Look_ahead']=True
-df_LA['Pop_size']=psize
+fig,axes=plt.subplots(2, 2, figsize=(10,10))
 
-df_ORI=pd.DataFrame(np.array(alldata_ORI).transpose(), columns=allnames)
-df_ORI['Look_ahead']=False
-df_ORI['Pop_size']=psize
-
-if len(pop_sizes)>1:
-    for k in pop_sizes[:-1]:
-        histories_LA_temp=[]
-        for i in range(iters_LA):
-            histories_LA_temp.append(pyabc.History("sqlite:///" +
-                                                  os.path.join(basepath,
-                                                               "results/Var"+str(sleepvars[0])+"/database",
-                                                               "DYNLA"+str(nodes)+"_"+str(k)+"_"+str(i)+".db")))
-            
-        histories_ORI_temp=[]
-        for i in range(iters_ORI):
-            histories_ORI_temp.append(pyabc.History("sqlite:///" +
-                                                  os.path.join(basepath,
-                                                               "results/Var"+str(sleepvars[0])+"/database",
-                                                               "ORI"+str(nodes)+"_"+str(k)+"_"+str(i)+".db")))
-        
-        theta1_means_LA = np.zeros(iters_LA)
-        theta1_stds_LA = np.zeros(iters_LA)
-
-        theta2_means_LA = np.zeros(iters_LA)
-        theta2_stds_LA = np.zeros(iters_LA)
-
-        effective_sample_size_LA=np.zeros(iters_LA)
-
-        for i in range(iters_LA):
-
-            df,w= histories_LA_temp[i].get_distribution(m=0,t=histories_LA[i].max_t)
-
-            points = df['theta1'].values
-            theta1_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta1_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            points = df['theta2'].values
-            theta2_means_LA[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta2_stds_LA[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            effective_sample_size_LA[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-        alldata_LA_temp = []
-        for i in range(len(allnames)):
-            alldata_LA_temp.append(eval(allnames[i]+"_LA"))
-        
-        
-        theta1_means_ORI = np.zeros(iters_ORI)
-        theta1_stds_ORI = np.zeros(iters_ORI)
-
-        theta2_means_ORI = np.zeros(iters_ORI)
-        theta2_stds_ORI = np.zeros(iters_ORI)
-
-        effective_sample_size_ORI = np.zeros(iters_ORI)
-
-        for i in range(iters_ORI):
-
-            df,w= histories_ORI_temp[i].get_distribution(m=0,t=histories_ORI[i].max_t)
-
-            points = df['theta1'].values
-            theta1_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta1_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            points = df['theta2'].values
-            theta2_means_ORI[i]=pyabc.weighted_statistics.weighted_mean(points,w)
-            theta2_stds_ORI[i]=pyabc.weighted_statistics.weighted_std(points,w)
-
-            effective_sample_size_ORI[i]=pyabc.weighted_statistics.effective_sample_size(w)
-
-        alldata_ORI_temp = []
-        for i in range(len(allnames)):
-            alldata_ORI_temp.append(eval(allnames[i]+"_ORI"))
-        
-        df_LA_temp=pd.DataFrame(np.array(alldata_LA_temp).transpose(), columns=allnames)
-        df_LA_temp['Look_ahead']=True
-        df_LA_temp['Pop_size']=k
-        
-        df_LA=pd.concat([df_LA, df_LA_temp])
-        
-        df_ORI_temp=pd.DataFrame(np.array(alldata_ORI_temp).transpose(), columns=allnames)
-        df_ORI_temp['Look_ahead']=False
-        df_ORI_temp['Pop_size']=k
-        
-        df_ORI=pd.concat([df_ORI, df_ORI_temp])
-
-FullDFPop = pd.concat([df_ORI, df_LA])
+ax = axes[0][0]
+sns.boxplot(x="Pop_size",y=col_names[0], hue="Scheduling",
+            data=FullDFPop, ax=axes[0][0], hue_order=["DYN","LA"])
+#l1=plt.bar([0],[0],0 ,label="A", color='white')
+#axes[0][0].set_title("A: Means; z=1")
+ymin,ymax=ax.get_ylim()
+xmin,xmax=ax.get_xlim()
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'A')
+ax.set_xlabel("Population size")
+ax.set_ylabel("Mean")
+ax.tick_params(axis='both', which='major', labelsize=10)
+ax.legend([],[], frameon=False)#, loc='upper left', bbox_to_anchor = (-0.05,1))
 
 
-# In[17]:
+ax = axes[0][1]
+sns.boxplot(x="Pop_size",y=col_names[1], hue="Scheduling",
+            data=FullDFPop, ax=ax, hue_order=["DYN","LA"])
+ymin,ymax=ax.get_ylim()
+xmin,xmax=ax.get_xlim()
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'B')
+#axes[0][1].set_title("B: Standard deviation; z=1")
+axes[0][1].set_xlabel("Population size")
+axes[0][1].set_ylabel("Standard deviations")
+axes[0][1].tick_params(axis='both', which='major', labelsize=10)
+ax.legend([],[], frameon=False)
 
 
-sns.set_theme(style="whitegrid")
-
-plotnr=3
-
-fig,axes=plt.subplots(1, plotnr, figsize=(plotnr*5,5))
-
-sns.boxplot(x="Pop_size",y=allnames[0], hue="Look_ahead", data=FullDFPop, ax=axes[0])
-    
-axes[0].set_xlabel("Population size")
-
-
-sns.boxplot(x="LNVariance",y=allnames[0], hue="Look_ahead", data=FullDFVar, ax=axes[1])
-    
-axes[1].set_xlabel("LogNormal Variance")
+ax = axes[1][0]
+sns.boxplot(x="LNVariance",y=col_names[0], hue="Scheduling",
+            data=FullDFVar_N256, ax=axes[1][0], hue_order=["DYN","LA"])
+ymin,ymax=ax.get_ylim()
+xmin,xmax=ax.get_xlim()
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'C')
+#axes[1][0].set_title("C: Means; N=4096")
+axes[1][0].set_xlabel("LogNormal Variance")
+axes[1][0].set_ylabel("Mean")
+axes[1][0].tick_params(axis='both', which='major', labelsize=10)
+ax.legend([],[], frameon=False)
 
 
-sns.boxplot(x="LNVariance",y=allnames[2], hue="Look_ahead", data=FullDFVar, ax=axes[2])
-    
-axes[2].set_xlabel("LogNormal Variance")
+ax = axes[1][1]
+sns.boxplot(x="LNVariance",y=col_names[2], hue="Scheduling",
+            data=FullDFVar_N256, ax=axes[1][1], hue_order=["DYN","LA"])
+ymin,ymax=ax.get_ylim()
+xmin,xmax=ax.get_xlim()
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'D')
+#axes[1][1].set_title("D: Effective sample sizes; N=256")
+axes[1][1].set_xlabel("LogNormal variance")
+axes[1][1].set_ylabel("Effective sample size")
+axes[1][1].tick_params(axis='both', which='major', labelsize=10)
+ax.legend([],[], frameon=False)
 
+
+legend, axi = plt.subplots()
+ax = axi
+l1=ax.bar([xmax],[0.5*(ymax-ymin)],0, bottom = ymin)
+l2=ax.bar([xmax],[0.5*(ymax-ymin)],0, bottom = ymin)
+labels=["DYN","LA"]
+
+axes[0][1].legend([l1,l2],labels, loc='lower right', bbox_to_anchor = (1.4,0.8), frameon=False)
 fig.tight_layout()
 
-plt.savefig(os.path.join(basepath, "img", "BoxPlots.pdf"))
+fig.savefig(os.path.join(basepath, "img", "ODEBoxPlots.pdf"))
 
 
-# In[18]:
+# In[10]:
 
 
 max_t=histories_LA[-1].max_t
 
-fig,ax = plt.subplots()
+fig,ax = plt.subplots(1,1, figsize=(5,5))
 
 for i in range(max_t):
     df,w = histories_LA[0].get_distribution(m=0,t=i)
-    pyabc.visualization.plot_kde_1d(df, w, x='theta1',ax=ax, color='black', alpha=(i+1)/max_t, label='Gen'+str(i+1))
+    pyabc.visualization.plot_kde_1d(df, w, x='theta1',ax=ax, color='black', alpha=(i)/max_t)
 
 df,w = histories_LA[0].get_distribution(m=0,t=max_t)
-pyabc.visualization.plot_kde_1d(df, w, x='theta1',ax=ax, color='blue', alpha=0.8, label='LA Posterior')
+pyabc.visualization.plot_kde_1d(df, w, x='theta1',ax=ax, color='blue')
 
 df_ori, w_ori = histories_ORI[1].get_distribution(m=0,t=histories_ORI[1].max_t)
-pyabc.visualization.plot_kde_1d(df_ori, w_ori, x='theta1',ax=ax, color='orange', alpha=0.8, label='Ori Posterior')
+pyabc.visualization.plot_kde_1d(df_ori, w_ori, x='theta1',ax=ax, color='orange')
 
-ax.axvline(x = alldata_LA[0].mean(), label="LA mean", color="blue", linestyle="dashed")
-ax.axvline(x = alldata_ORI[0].mean(), label='Ori mean', color="orange", linestyle="dotted")
+ax.axvline(x = alldata_LA[:, 0].mean(), color="blue", linestyle="dashed")
+ax.axvline(x = alldata_ORI[:, 0].mean(), color="orange", linestyle="dashed")
 
+
+ax.plot(0,0, color='black', alpha=0.5, label= "Generations 1-"+str(max_t))
+ax.plot(0,0, color='blue', label='LA Posterior')
+ax.plot(0,0, color='orange', label='DYN Posterior')
+ax.plot(0,0, linestyle='dashed', color='black', label="Means")
 ax.set_yticks([])
 ax.set_xlim(xmin=0, xmax=0.3)
-plt.legend()
-
-plt.savefig(os.path.join(basepath, "img", "PosteriorDevelopment.pdf"))
-
-
-# In[21]:
-
-
-fig,ax = plt.subplots()
-
-for i in range(3):
-    df,w = histories_LA[i].get_distribution(m=0,t=max_t)
-    pyabc.visualization.plot_kde_1d(df, w, x='theta1',ax=ax, color='blue', alpha=0.5)
-
-    df_ori, w_ori = histories_ORI[i].get_distribution(m=0,t=histories_ORI[1].max_t)
-    pyabc.visualization.plot_kde_1d(df_ori, w_ori, x='theta1',ax=ax, color='orangered', alpha=0.5)
-
-ax.plot(0,0, label = "LA", color = 'blue')
-ax.plot(0,0, label = "Ori", color = 'orangered')
-
-
-ax.axvline(x = alldata_LA[0].mean(), label="LA mean", color="blue", linestyle="dashed")
-ax.axvline(x = alldata_ORI[0].mean(), label='Ori mean', color="orange", linestyle="dotted")
+ax.tick_params(axis='both', which='major', labelsize=10)
 
 plt.legend()
 
-plt.savefig(os.path.join(basepath, "img", "Posteriors.pdf"))
+plt.savefig(os.path.join(basepath, "img", "ODEPosteriorDevelopment.pdf"))
 
+
+# In[11]:
+
+
+acceptance_rates_array=[]
+for psize in pop_sizes:
+    for i in range(iters_LA[0]):
+        path = os.path.join(basepath, "results/Var"+str(sleepvars[0])+"/logfiles", "Logs"+str(nodes)+"_"+str(psize)+"_"+str(i)+".csv")
+        stat_df = pd.read_csv(path)[1:]
+        last_gen = stat_df.iloc[-1,:]
+        last_gen["Pop_size"]=psize
+        last_gen["LA fraction"]=min(last_gen['n_lookahead_accepted']/psize,1)
+        last_gen_df = last_gen.to_frame().T
+        acceptance_rates_array.append(last_gen_df)
+
+acceptance_rates_df = pd.concat(acceptance_rates_array)
+fig,ax=plt.subplots(1,1,figsize=(5,5))
+
+sns.boxplot(x="Pop_size",y="LA fraction", data=acceptance_rates_df, ax=ax)
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'E')
+ax.set_title(None)
+ax.set_xlabel("Population size")
+ax.set_ylabel("Preliminary samples")
+
+from matplotlib.ticker import PercentFormatter
+plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
+
+fig.tight_layout()
+plt.savefig(os.path.join(basepath, "img", "ODEFinalPrelFraction.pdf"))
