@@ -21,7 +21,7 @@ rc('font', **font)
 nodes = 8
 noisevar = 0.03
 
-sleepvars=[1.0, 1.5, 2.0]
+sleepvars=[0.5, 1.0, 1.5, 2.0]
 
 basepath="/p/project/fitmulticell/felipe/scripts/Batch_pyABC/programs/ODE"
 
@@ -30,9 +30,9 @@ pop_sizes = [64, 256, 1024, 4096]
 eps_list=[8, 4, 2, 1, 0.7,  0.5, 0.33, 0.25]
 eps = pyabc.ListEpsilon(eps_list)
 
-iters_LA=[30,30,30]
-iters_ORI=[30,30,30]
-iters_STAT=[1,1,1]
+iters_LA=[10,10,10,10]
+iters_ORI=[10,10,10,10]
+iters_STAT=[3,3,1]
 
 
 # In[3]:
@@ -40,15 +40,16 @@ iters_STAT=[1,1,1]
 def load_histories(basepath, look_ahead, iters, sleepvar, popsize):
     histories = []
     for i in range(iters):
+        print(sleepvar, look_ahead, popsize, i)
         path=os.path.join(basepath,
                           "results/Var"+str(sleepvar)+"/database", 
                           str(look_ahead)+str(nodes)+"_"+str(popsize)+"_"+str(i)+".db")
         histories.append(pyabc.History("sqlite:///" + path))
     return histories
 
-histories_LA=load_histories(basepath, "DYNLA", iters_LA[0], sleepvars[0], pop_sizes[-1])
-histories_ORI=load_histories(basepath, "ORI", iters_ORI[0], sleepvars[0], pop_sizes[-1])
-histories_STATIC=load_histories(basepath, "STATIC", iters_STAT[0], sleepvars[0], pop_sizes[-1])
+histories_LA=load_histories(basepath, "DYNLA", iters_LA[0], sleepvars[1], pop_sizes[-1])
+histories_ORI=load_histories(basepath, "ORI", iters_ORI[0], sleepvars[1], pop_sizes[-1])
+histories_STATIC=load_histories(basepath, "STATIC", iters_STAT[0], sleepvars[1], pop_sizes[-1])
 
 
 # In[4]:
@@ -133,7 +134,7 @@ def data_to_frame(basepath, look_aheads, alliters, sleepvars, pop_sizes):
 
 FullDFVar=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], sleepvars, [pop_sizes[-1]])
 FullDFVar_N256=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], sleepvars, [pop_sizes[0]])
-FullDFPop=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], [1], pop_sizes)
+FullDFPop=data_to_frame(basepath, ["DYNLA","ORI"], [iters_LA, iters_ORI], [1.0], pop_sizes)
 
 
 # In[9]:
@@ -188,7 +189,7 @@ ymin,ymax=ax.get_ylim()
 xmin,xmax=ax.get_xlim()
 ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'D')
 #axes[1][1].set_title("D: Effective sample sizes; N=256")
-axes[1][1].set_xlabel("LogNormal variance")
+axes[1][1].set_xlabel("STD of delay on log-scale")
 axes[1][1].set_ylabel("Effective sample size")
 axes[1][1].tick_params(axis='both', which='major', labelsize=10)
 ax.legend([],[], frameon=False)
@@ -242,29 +243,56 @@ plt.savefig(os.path.join(basepath, "img", "ODEPosteriorDevelopment.pdf"))
 
 # In[11]:
 
+def get_acceptance_rates(basepath, nodes, pop_sizes, sleepvar, iters):
+    acceptance_rates_array=[]
+    for psize in pop_sizes:
+        for i in range(iters):
+            path = os.path.join(basepath, "results/Var"+str(sleepvar)+"/logfiles", "Logs"+str(nodes)+"_"+str(psize)+"_"+str(i)+".csv")
+            stat_df = pd.read_csv(path)[1:]
+                                
+            last_gen = stat_df.iloc[-1,:]
+            last_gen["sleepvar"]=sleepvar
+            last_gen["Pop_size"]=psize
+            last_gen["LA fraction"]=min(last_gen['n_lookahead_accepted']/psize,1)
+            last_gen_df = last_gen.to_frame().T
+            acceptance_rates_array.append(last_gen_df)
+    acceptance_rates_df = pd.concat(acceptance_rates_array)
+    return acceptance_rates_df
 
-acceptance_rates_array=[]
-for psize in pop_sizes:
-    for i in range(iters_LA[0]):
-        path = os.path.join(basepath, "results/Var"+str(sleepvars[0])+"/logfiles", "Logs"+str(nodes)+"_"+str(psize)+"_"+str(i)+".csv")
-        stat_df = pd.read_csv(path)[1:]
-        last_gen = stat_df.iloc[-1,:]
-        last_gen["Pop_size"]=psize
-        last_gen["LA fraction"]=min(last_gen['n_lookahead_accepted']/psize,1)
-        last_gen_df = last_gen.to_frame().T
-        acceptance_rates_array.append(last_gen_df)
+all_acceptances_list=[]
+for sleep_i in range(len(sleepvars)):
+    acceptances_df = get_acceptance_rates(basepath, nodes, pop_sizes, sleepvars[sleep_i], iters_LA[sleep_i])
+    all_acceptances_list.append(acceptances_df)
+    
+all_acceptances_df = pd.concat(all_acceptances_list)
 
-acceptance_rates_df = pd.concat(acceptance_rates_array)
-fig,ax=plt.subplots(1,1,figsize=(5,5))
+#In[12]
 
-sns.boxplot(x="Pop_size",y="LA fraction", data=acceptance_rates_df, ax=ax)
+fig,axes=plt.subplots(2,1,figsize=(5,10))
+
+ax = axes[0]
+
+sns.boxplot(x="Pop_size",y="LA fraction", data=all_acceptances_df[all_acceptances_df["sleepvar"]==1], ax=ax)
 ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'E')
 ax.set_title(None)
 ax.set_xlabel("Population size")
-ax.set_ylabel("Preliminary samples")
+ax.set_ylabel("Samples from preliminary")
 
 from matplotlib.ticker import PercentFormatter
-plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
+ax.yaxis.set_major_formatter(PercentFormatter(1))
+ax.tick_params(axis='both', which='major', labelsize=10)
+
+ax = axes[1]
+
+sns.boxplot(x="sleepvar",y="LA fraction", data=all_acceptances_df[all_acceptances_df["Pop_size"]==pop_sizes[-1]], ax=ax)
+ax.text(xmin+0.02*(xmax-xmin),ymin+0.95*(ymax-ymin),'E')
+ax.set_title(None)
+ax.set_xlabel("STD of delay on log-scale")
+ax.set_ylabel("Samples from preliminary")
+
+from matplotlib.ticker import PercentFormatter
+ax.yaxis.set_major_formatter(PercentFormatter(1))
+ax.tick_params(axis='both', which='major', labelsize=10)
 
 fig.tight_layout()
 plt.savefig(os.path.join(basepath, "img", "ODEFinalPrelFraction.pdf"))
