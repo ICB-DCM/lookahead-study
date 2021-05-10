@@ -1,0 +1,37 @@
+/home/bq_fgraw/.local/lib/python3.7/site-packages/pyabc/external/r_rpy2.py:76: UserWarning: The support of R via rpy2 is considered experimental.
+  warnings.warn("The support of R via rpy2 is considered experimental.")
+INFO:History:Start <ABCSMC id=7, start_time=2021-03-03 10:58:07.791948>
+INFO:ABC:t: 0, eps: 65.
+INFO:ABC:Acceptance rate: 256 / 629 = 4.0700e-01, ESS=2.5600e+02.
+INFO:ABC:t: 1, eps: 35.6.
+INFO:ABC:Acceptance rate: 256 / 694 = 3.6888e-01, ESS=1.0623e+02.
+INFO:ABC:t: 2, eps: 27.2.
+INFO:ABC:Acceptance rate: 256 / 810 = 3.1605e-01, ESS=8.7801e+01.
+INFO:ABC:t: 3, eps: 20.
+INFO:ABC:Acceptance rate: 256 / 995 = 2.5729e-01, ESS=7.2920e+01.
+INFO:ABC:t: 4, eps: 16.2.
+INFO:ABC:Acceptance rate: 256 / 993 = 2.5780e-01, ESS=5.7353e+01.
+INFO:ABC:t: 5, eps: 13.4.
+INFO:ABC:Acceptance rate: 256 / 1273 = 2.0110e-01, ESS=7.0822e+01.
+INFO:ABC:t: 6, eps: 11.4.
+INFO:ABC:Acceptance rate: 256 / 1821 = 1.4058e-01, ESS=8.8786e+01.
+INFO:ABC:t: 7, eps: 9.68.
+INFO:ABC:Acceptance rate: 256 / 2333 = 1.0973e-01, ESS=9.0610e+01.
+INFO:ABC:t: 8, eps: 8.45.
+INFO:ABC:Acceptance rate: 256 / 2939 = 8.7104e-02, ESS=3.5309e+01.
+INFO:ABC:t: 9, eps: 7.46.
+INFO:ABC:Acceptance rate: 256 / 6261 = 4.0888e-02, ESS=5.1458e+01.
+INFO:ABC:t: 10, eps: 6.8.
+INFO:ABC:Acceptance rate: 256 / 6461 = 3.9622e-02, ESS=7.2892e+01.
+INFO:ABC:t: 11, eps: 6.26.
+INFO:ABC:Acceptance rate: 256 / 7512 = 3.4079e-02, ESS=2.9124e+01.
+INFO:ABC:t: 12, eps: 6.15.
+INFO:ABC:Acceptance rate: 256 / 9420 = 2.7176e-02, ESS=4.4817e+01.
+INFO:ABC:t: 13, eps: 5.48.
+INFO:ABC:Acceptance rate: 256 / 14276 = 1.7932e-02, ESS=7.5372e+01.
+INFO:ABC:t: 14, eps: 5.3.
+INFO:ABC:Acceptance rate: 256 / 9744 = 2.6273e-02, ESS=6.4665e+01.
+INFO:ABC:t: 15, eps: 5.
+INFO:ABC:Acceptance rate: 256 / 13344 = 1.9185e-02, ESS=7.2037e+01.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:History:Done <ABCSMC id=7, duration=3 days, 21:00:33.699998, end_time=2021-03-07 07:58:41.491946>

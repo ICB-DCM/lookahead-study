@@ -1,0 +1,40 @@
+/home/hd/hd_hd/hd_ty170/builds/python/3.7.3/lib/python3.7/site-packages/rpy2/robjects/pandas2ri.py:14: FutureWarning: pandas.core.index is deprecated and will be removed in a future version.  The public classes are available in the top-level namespace.
+  from pandas.core.index import Index as PandasIndex
+/home/hd/hd_hd/hd_ty170/builds/python/3.7.3/lib/python3.7/site-packages/rpy2/robjects/pandas2ri.py:34: UserWarning: pandas >= 1.0 is not supported.
+  warnings.warn('pandas >= 1.0 is not supported.')
+/home/hd/hd_hd/hd_ty170/.local/lib/python3.7/site-packages/pyabc/external/r_rpy2.py:76: UserWarning: The support of R via rpy2 is considered experimental.
+  warnings.warn("The support of R via rpy2 is considered experimental.")
+INFO:History:Start <ABCSMC(id=1, start_time=2021-01-11 10:31:42.931707, end_time=None)>
+INFO:ABC:t: 0, eps: 65.
+INFO:ABC:Acceptance rate: 256 / 440 = 5.8182e-01, ESS=2.5600e+02.
+INFO:ABC:t: 1, eps: 35.55119031851695.
+INFO:ABC:Acceptance rate: 256 / 694 = 3.6888e-01, ESS=1.2582e+02.
+INFO:ABC:t: 2, eps: 27.62979862602487.
+INFO:ABC:Acceptance rate: 256 / 763 = 3.3552e-01, ESS=9.4941e+01.
+INFO:ABC:t: 3, eps: 19.729497748062908.
+INFO:ABC:Acceptance rate: 256 / 949 = 2.6976e-01, ESS=3.4397e+01.
+INFO:ABC:t: 4, eps: 15.75853644036152.
+INFO:ABC:Acceptance rate: 256 / 1454 = 1.7607e-01, ESS=4.3906e+01.
+INFO:ABC:t: 5, eps: 12.65976175523644.
+INFO:ABC:Acceptance rate: 256 / 1997 = 1.2819e-01, ESS=7.2849e+01.
+INFO:ABC:t: 6, eps: 10.632161516950456.
+INFO:ABC:Acceptance rate: 256 / 2259 = 1.1332e-01, ESS=6.0516e+01.
+INFO:ABC:t: 7, eps: 9.329691678697321.
+INFO:ABC:Acceptance rate: 256 / 3563 = 7.1850e-02, ESS=7.3004e+01.
+INFO:ABC:t: 8, eps: 8.370074540528444.
+INFO:ABC:Acceptance rate: 256 / 3237 = 7.9086e-02, ESS=4.8794e+01.
+INFO:ABC:t: 9, eps: 7.551983043433994.
+INFO:ABC:Acceptance rate: 256 / 4428 = 5.7814e-02, ESS=2.5154e+01.
+INFO:ABC:t: 10, eps: 6.9012280899512195.
+INFO:ABC:Acceptance rate: 256 / 6883 = 3.7193e-02, ESS=6.9766e+01.
+INFO:ABC:t: 11, eps: 6.195983089865551.
+INFO:ABC:Acceptance rate: 256 / 8193 = 3.1246e-02, ESS=3.5400e+01.
+INFO:ABC:t: 12, eps: 5.68982746600251.
+INFO:ABC:Acceptance rate: 256 / 9719 = 2.6340e-02, ESS=2.1393e+01.
+INFO:ABC:t: 13, eps: 5.354139219045607.
+INFO:ABC:Acceptance rate: 256 / 11271 = 2.2713e-02, ESS=2.3877e+01.
+INFO:ABC:t: 14, eps: 4.940016396951877.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:ABC:Acceptance rate: 256 / 13940 = 1.8364e-02, ESS=2.5083e+01.
+INFO:pyabc.util:Stopping: minimum epsilon.
+INFO:History:Done <ABCSMC(id=1, start_time=2021-01-11 10:31:42.931707, end_time=2021-01-14 09:57:59.553292)>

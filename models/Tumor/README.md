@@ -1,2 +1,0 @@
-Run on an HPC, the TumorModel.py program performs parameter inference for the TumorModel (that is also found on https://pyabc.readthedocs.io/en/latest/examples/multiscale_agent_based.html ) twice, once in look-ahead mode and once in standard mode. It saves the databases and already creates some images visualizing the posterior distribution.
-The .ipynb file loads the databases and then performs additional visualizations of credible intervals and also compares the runtimes/how the epsilon values develop over time.

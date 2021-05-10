@@ -1,1 +1,0 @@
-This notebook defines the model that just squares the parameter and therefore has two modes, one on the positive and one on the negative side. Whenever the parameter candidate is negative there is a large wait time added. In the notebook sampling is performed, the results visualized and compared between the look-ahead and standard mode.
